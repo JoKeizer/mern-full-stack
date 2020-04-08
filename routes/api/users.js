@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config')
+const {check,validationResult} = require('express-validator');
 
 //make user model available
 const User = require('../../models/User')
 
-const {
-    check,
-    validationResult
-} = require('express-validator');
 
 //@route POST api/users
 //@desc Register user
@@ -55,21 +54,31 @@ router.post('/', [
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
+        //save to database
         await user.save();
 
-        // Retun jsonwebtoken
+        // Retun jsonwebtoken GET a User TOKEN
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
 
-    console.log(req.body)
-    res.send('User registered');
+        jwt.sign(
+            payload, 
+            config.get('jwtSecret'),
+            {expiresIn: 360000},
+             (err, token) => {
+                if(err) throw err;
+                res.json({token})
+            })
+
+        //send token back to protect routes 
+
     } catch(error) {
         console.log(err.message);
         res.status(500).send('Server error')
-
     }
-
-
-
-
 });
 
 module.exports = router
