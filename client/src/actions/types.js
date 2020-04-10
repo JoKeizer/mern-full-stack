@@ -1,5 +1,6 @@
+
 export const SET_ALERT = 'SET_ALERT';
-export const REMOVE_ALERT = 'SET_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
 
 //Backend Check
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
@@ -12,9 +13,13 @@ export const LOGOUT = 'LOGOUT';
 //POFILE
 export const GET_PROFILE = 'GET_PROFILE';
 export const PROFILE_ERROR = 'PROFILE_ERROR';
+export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 
-
-
+export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
+export const GET_PROFILES = 'GET_PROFILES';
+export const GET_REPOS = 'GET_REPOS';
+export const NO_REPOS = 'NO_REPOS';
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
 
 //AUTH
