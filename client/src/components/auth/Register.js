@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import {setAlert} from '../../actions/alert'
 import {register} from '../../actions/auth'
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 //setAlert ipv props we take setAlert from props
-const Register = ({setAlert, register}) => {
+const Register = ({setAlert, register, isAuthenticated}) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -32,9 +32,13 @@ const Register = ({setAlert, register}) => {
             //register to database
             register({
                 name, email, password
-            })
-            
+            }) 
         }
+    }
+
+    //REDIRECT IF LOGGED 
+    if(isAuthenticated) {
+        return <Redirect to='/dashboard'/>
     }
 
     return (
@@ -94,10 +98,17 @@ const Register = ({setAlert, register}) => {
 
     );
 };
+
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-
+  isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, {setAlert, register})(Register)
+//TO GET THE AUTH STATE REDUCER GET 
+const mapStateToProps = state => ({
+    // auth: state.auth ===> ALL FROM STATE we want ONLY isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, {setAlert, register})(Register)

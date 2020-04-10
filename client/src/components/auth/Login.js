@@ -1,7 +1,11 @@
 import React, {Fragment, useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import {login} from '../../actions/auth'
+import {connect} from 'react-redux';
 
-const Login = () => {
+//props.login
+const Login = ({login, isAuthenticated}) => {
 
     const [formData, setFormData] = useState({
         email: '',
@@ -16,7 +20,13 @@ const Login = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
-        
+        //login reducer with redux
+        login(email, password)
+    }
+
+    //REDIRECT IF LOGGED 
+    if(isAuthenticated) {
+        return <Redirect to='/dashboard'/>
     }
 
     return (
@@ -59,4 +69,19 @@ const Login = () => {
     )
 }
 
-export default Login
+Login.propTypes = {
+    login: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool,
+
+}
+
+//TO GET THE AUTH STATE REDUCER GET 
+const mapStateToProps = state => ({
+    // auth: state.auth ===> ALL FROM STATE we want ONLY isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+
+//GET LOGIN FROM REDUX WITH CONNECT
+
+export default connect(mapStateToProps, {login }) (Login);
