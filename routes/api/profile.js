@@ -234,6 +234,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
     await foundProfile.save();
     return res.status(200).json(foundProfile);
   } catch (error) {
+
     console.error(error);
     return res.status(500).json({ msg: 'Server error' });
   }
